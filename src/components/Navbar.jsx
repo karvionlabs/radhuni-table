@@ -41,7 +41,7 @@ export default function Navbar({ trayItemsCount, trayTotal, onOpenTray, onOpenRe
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-serif text-xl sm:text-2xl font-bold tracking-tight text-white group-hover:text-culinary-gold transition-colors">
-                  CHEF’S TABLE
+                  RADHUNI TABLE
                 </span>
                 <span className="hidden sm:inline-block px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider rounded-full bg-amber-500/15 text-culinary-gold border border-amber-500/30">
                   Gulshan 2

@@ -13,7 +13,7 @@ export default function LocationSection() {
             <span>Prime Location & Arrival Guide</span>
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">
-            Visit Chef’s Table at Gulshan 2
+            Visit Radhuni Table at Gulshan 2
           </h2>
           <p className="mt-3 text-sm sm:text-base text-slate-300">
             Perched on Level 2 above Unimart Superstore in the landmark Gulshan Centre Point.
@@ -88,7 +88,7 @@ export default function LocationSection() {
                   <div>
                     <h3 className="text-base font-bold text-white">Parking & Access</h3>
                     <p className="text-xs sm:text-sm text-slate-300 mt-1 leading-relaxed">
-                      Ample secure multi-level underground basement parking available at Unimart. Dedicated elevator access directly to Level 2 Chef’s Table.
+                      Ample secure multi-level underground basement parking available at Unimart. Dedicated elevator access directly to Level 2 Radhuni Table.
                     </p>
                   </div>
                 </div>
@@ -113,7 +113,7 @@ export default function LocationSection() {
             {/* Embedded Google Maps View centered on Chef's Table Gulshan 2 */}
             <div className="relative flex-1 w-full min-h-[360px] overflow-hidden">
               <iframe
-                title="Chef's Table Gulshan 2 Location"
+                title="Radhuni Table Gulshan 2 Location"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.0475355047814!2d90.41237317600868!3d23.795730778640702!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c7429b9b4369%3A0xb10937f2b0542529!2sChef's%20Table%20-%20Gulshan%202!5e0!3m2!1sen!2sbd!4v1700000000000!5m2!1sen!2sbd"
                 className="w-full h-full border-0 filter grayscale-[25%] contrast-[110%] opacity-90 hover:opacity-100 transition-opacity"
                 loading="lazy"
@@ -121,7 +121,7 @@ export default function LocationSection() {
               />
               <div className="absolute top-4 left-4 bg-culinary-dark/90 backdrop-blur-md px-3.5 py-2 rounded-xl border border-slate-700 text-xs font-semibold text-slate-200 shadow-xl flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-                <span>Chef's Table • Gulshan Centre Point</span>
+                <span>Radhuni Table • Gulshan Centre Point</span>
               </div>
             </div>
 

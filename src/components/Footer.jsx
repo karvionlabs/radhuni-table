@@ -17,7 +17,7 @@ export default function Footer({ onOpenReservation, onOpenTray }) {
                 </div>
               </div>
               <span className="font-serif text-2xl font-bold tracking-tight text-white">
-                CHEF’S TABLE
+                RADHUNI TABLE
               </span>
             </div>
 
@@ -110,7 +110,7 @@ export default function Footer({ onOpenReservation, onOpenTray }) {
 
         {/* Bottom Bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-500 text-[11px]">
-          <p>© {new Date().getFullYear()} Chef’s Table Gulshan 2. Inspired by Dhaka’s premiere food hall culture.</p>
+          <p>© {new Date().getFullYear()} Radhuni Table Gulshan 2. Inspired by Dhaka’s premiere food hall culture.</p>
           <div className="flex items-center gap-1">
             <span>Crafted with passion for culinary excellence</span>
           </div>

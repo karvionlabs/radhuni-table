@@ -28,7 +28,7 @@ export default function ReviewsSection() {
       date: 'Just now',
       source: 'Direct Review',
       comment: newReview.comment,
-      favoriteItems: newReview.favorite ? [newReview.favorite] : ['Chef’s Table Signature'],
+      favoriteItems: newReview.favorite ? [newReview.favorite] : ['Radhuni Table Signature'],
       verifiedDiner: true,
     };
 
@@ -128,7 +128,7 @@ export default function ReviewsSection() {
         {showReviewForm && (
           <div className="mb-12 p-6 sm:p-8 rounded-3xl bg-[#0e1216] border border-amber-500/40 shadow-2xl animate-in slide-in-from-top-4 duration-300">
             <h3 className="text-lg font-serif font-bold text-white mb-1">
-              Share Your Chef’s Table Experience
+              Share Your Radhuni Table Experience
             </h3>
             <p className="text-xs text-slate-400 mb-6">
               Tell the community about your favorite stall, seat zone, or dish!

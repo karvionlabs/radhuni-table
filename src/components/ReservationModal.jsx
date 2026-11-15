@@ -36,11 +36,11 @@ export default function ReservationModal({ isOpen, onClose, initialZone }) {
   const handleDownloadICS = () => {
     const icsContent = `BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//Chefs Table Gulshan 2//Reservation//EN
+PRODID:-//Radhuni Table Gulshan 2//Reservation//EN
 BEGIN:VEVENT
-SUMMARY:Dining at Chef's Table Gulshan 2 (${confirmedReservation.zone})
-DESCRIPTION:Reservation code: ${confirmedReservation.code}\\nGuests: ${confirmedReservation.guests}\\nChef's Table - Level 2, Unimart Gulshan Centre Point, Road 90, Gulshan 2, Dhaka
-LOCATION:Chef's Table, Unimart Level 2, Gulshan 2, Dhaka
+SUMMARY:Dining at Radhuni Table Gulshan 2 (${confirmedReservation.zone})
+DESCRIPTION:Reservation code: ${confirmedReservation.code}\\nGuests: ${confirmedReservation.guests}\\nRadhuni Table - Level 2, Unimart Gulshan Centre Point, Road 90, Gulshan 2, Dhaka
+LOCATION:Radhuni Table, Unimart Level 2, Gulshan 2, Dhaka
 DTSTART:${confirmedReservation.date.replace(/-/g, '')}T${confirmedReservation.time.replace(':', '')}00
 STATUS:CONFIRMED
 END:VEVENT
@@ -50,7 +50,7 @@ END:VCALENDAR`;
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `ChefsTable_Reservation_${confirmedReservation.code}.ics`);
+    link.setAttribute('download', `RadhuniTable_Reservation_${confirmedReservation.code}.ics`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -89,7 +89,7 @@ END:VCALENDAR`;
                 We're Expecting You!
               </h3>
               <p className="text-xs text-slate-300 mt-1">
-                Your reservation at Chef’s Table Gulshan 2 is locked in.
+                Your reservation at Radhuni Table Gulshan 2 is locked in.
               </p>
             </div>
 

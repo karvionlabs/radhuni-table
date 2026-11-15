@@ -20,7 +20,7 @@ export default function SeatingMap({ onSelectZoneForReservation }) {
           </h2>
           <p className="mt-3 text-sm sm:text-base text-slate-300 leading-relaxed">
             Whether you crave the theatrical energy of sizzling woks, a quiet family leather booth, 
-            or a sunlit garden table, explore each curated sector of Chef’s Table Gulshan 2.
+            or a sunlit garden table, explore each curated sector of Radhuni Table Gulshan 2.
           </p>
         </div>
 

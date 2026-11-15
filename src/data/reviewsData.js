@@ -19,7 +19,7 @@ export const reviewsData = [
     rating: 5,
     date: '1 month ago',
     source: 'Google Maps Review',
-    comment: 'Chef’s Table at Unimart Gulshan 2 is our go-to weekend dinner spot. The non-duplicating menu concept is genius—every stall takes immense pride in their specialty. Do not skip Turkish Fiesta’s grilled skewers and wrap up with Club Gelato’s Bronte Pistachio!',
+    comment: 'Radhuni Table at Unimart Gulshan 2 is our go-to weekend dinner spot. The non-duplicating menu concept is genius—every stall takes immense pride in their specialty. Do not skip Turkish Fiesta’s grilled skewers and wrap up with Club Gelato’s Bronte Pistachio!',
     favoriteItems: ['Sultan Grand Grill', 'Bronte Pistachio Gelato', 'Matcha Latte'],
     verifiedDiner: true
   },

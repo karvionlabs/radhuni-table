@@ -15,7 +15,7 @@ export const seatingZones = [
   {
     id: 'skylight-core',
     name: 'Central Skylight & Live Kitchens',
-    subtitle: 'The bustling heart of Chef’s Table surrounding wok & grill fires',
+    subtitle: 'The bustling heart of Radhuni Table surrounding wok & grill fires',
     capacity: 220,
     currentOccupancy: 82, // 82% full
     status: 'High Energy',

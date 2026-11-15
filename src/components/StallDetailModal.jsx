@@ -182,7 +182,7 @@ export default function StallDetailModal({ stall, onClose, onAddToCart, addedIte
 
         {/* Modal Footer */}
         <div className="p-4 sm:p-6 bg-[#0a0d10] border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
-          <span>Stall located at Level 2, Chef’s Table Gulshan 2</span>
+          <span>Stall located at Level 2, Radhuni Table Gulshan 2</span>
           <button
             onClick={onClose}
             className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold"

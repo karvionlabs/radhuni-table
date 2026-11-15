@@ -41,7 +41,7 @@ export default function StallExplorer({ onSelectStall, onAddToCart, addedItemsMa
               Explore 12+ Signature Stalls
             </h2>
             <p className="mt-2 text-sm sm:text-base text-slate-300 max-w-xl">
-              Each stall at Chef’s Table specializes in a distinct culinary tradition with zero menu crossover. Curate your meal across stalls into one unified tray.
+              Each stall at Radhuni Table specializes in a distinct culinary tradition with zero menu crossover. Curate your meal across stalls into one unified tray.
             </p>
           </div>
 
