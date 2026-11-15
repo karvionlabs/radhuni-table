@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Star, MessageSquarePlus, CheckCircle, ExternalLink, ThumbsUp, Sparkles, Filter } from 'lucide-react';
+import { Star, MessageSquarePlus, CheckCircle, ExternalLink, ThumbsUp, Sparkles, Filter, User } from 'lucide-react';
 import { reviewsData, ratingSummary } from '../data/reviewsData';
 
 export default function ReviewsSection() {
@@ -23,7 +23,7 @@ export default function ReviewsSection() {
       id: 'rev-user-' + Date.now(),
       author: newReview.author,
       role: 'Verified Foodie',
-      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
+      avatar: '',
       rating: Number(newReview.rating),
       date: 'Just now',
       source: 'Direct Review',
@@ -216,11 +216,17 @@ export default function ReviewsSection() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <img
-                      src={rev.avatar}
-                      alt={rev.author}
-                      className="w-10 h-10 rounded-full object-cover border border-amber-500/30"
-                    />
+                    {rev.avatar ? (
+                      <img
+                        src={rev.avatar}
+                        alt={rev.author}
+                        className="w-10 h-10 rounded-full object-cover border border-amber-500/30"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-slate-800/80 border border-slate-700/80 flex items-center justify-center text-slate-400 flex-shrink-0">
+                        <User className="w-5 h-5 text-slate-400" />
+                      </div>
+                    )}
                     <div>
                       <h4 className="text-sm font-bold text-white">{rev.author}</h4>
                       <p className="text-[11px] text-slate-400">{rev.role}</p>

@@ -1,9 +1,9 @@
 export const reviewsData = [
   {
     id: 'rev-1',
-    author: 'Tahsin Rahman',
+    author: 'Shakil Ahmed',
     role: 'Local Guide • Level 7',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
+    avatar: '',
     rating: 5,
     date: '2 weeks ago',
     source: 'Google Maps Review',
@@ -13,9 +13,9 @@ export const reviewsData = [
   },
   {
     id: 'rev-2',
-    author: 'Fabiha Chowdhury',
+    author: 'Ehsan',
     role: 'Food & Lifestyle Critic',
-    avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=150&q=80',
+    avatar: '',
     rating: 5,
     date: '1 month ago',
     source: 'Google Maps Review',
@@ -25,9 +25,9 @@ export const reviewsData = [
   },
   {
     id: 'rev-3',
-    author: 'Kazi Mahbubur',
+    author: 'Mahmud',
     role: 'Gulshan Resident',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
+    avatar: '',
     rating: 5,
     date: '3 weeks ago',
     source: 'Google Maps Review',
@@ -37,9 +37,9 @@ export const reviewsData = [
   },
   {
     id: 'rev-4',
-    author: 'Nabila Karim',
+    author: 'Imran',
     role: 'Architect & Designer',
-    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80',
+    avatar: '',
     rating: 5,
     date: '2 months ago',
     source: 'Google Maps Review',
