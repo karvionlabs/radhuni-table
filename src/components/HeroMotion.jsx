@@ -37,7 +37,7 @@ export default function HeroMotion({ onExploreStalls, onOpenSeating, onOpenReser
 
         {/* Main Display Headline */}
         <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white max-w-4xl mx-auto leading-[1.12]">
-          Dhaka’s Flagship{' '}
+          Chattogram’s Flagship{' '}
           <span className="gold-gradient-text italic font-normal">Gourmet Food Hall</span>
         </h1>
 
@@ -45,7 +45,7 @@ export default function HeroMotion({ onExploreStalls, onOpenSeating, onOpenReser
         <p className="mt-6 text-base sm:text-xl text-slate-300 max-w-2xl mx-auto font-normal leading-relaxed">
           Over <span className="text-white font-semibold">20 non-overlapping specialty stalls</span>, 
           from royal Awadhi handi curries and wood-fired sourdough pies to artisanal smash burgers and 
-          handcrafted Italian gelato. <span className="text-amber-300 font-medium">600+ communal seats</span> at Gulshan Centre Point.
+          handcrafted Italian gelato. <span className="text-amber-300 font-medium">600+ communal seats</span> at Abdullah Bhaban, Kazir Dewri.
         </p>
 
         {/* CTA Buttons */}

@@ -50,7 +50,7 @@ export default function ReviewsSection() {
               <span>Verified Diner Feedback</span>
             </div>
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">
-              Loved by Dhaka's Epicures
+              Loved by Chattogram's Epicures
             </h2>
             <p className="mt-2 text-sm sm:text-base text-slate-300 max-w-xl">
               Real reviews from Google Maps and local guides celebrating our food hall atmosphere, diversity of stalls, and signature dishes.
