@@ -136,11 +136,13 @@ export default function App() {
         onClearCart={handleClearCart}
       />
 
-      <ReservationModal
-        isOpen={isReservationOpen}
-        onClose={() => setIsReservationOpen(false)}
-        initialZone={reservationZone}
-      />
+      {isReservationOpen && (
+        <ReservationModal
+          isOpen={isReservationOpen}
+          onClose={() => setIsReservationOpen(false)}
+          initialZone={reservationZone}
+        />
+      )}
     </div>
   );
 }

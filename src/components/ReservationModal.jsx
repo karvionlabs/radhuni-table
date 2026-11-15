@@ -20,8 +20,6 @@ export default function ReservationModal({ isOpen, onClose, initialZone }) {
   const [confirmedReservation, setConfirmedReservation] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
 
-  if (!isOpen) return null;
-
   // Real-time Name Validation: 3-50 chars, Bengali or English letters, dots, hyphens, spaces
   const isNameValid = useMemo(() => {
     const clean = name.trim();
@@ -40,6 +38,8 @@ export default function ReservationModal({ isOpen, onClose, initialZone }) {
 
   // Both fields must be fully valid before confirmation is allowed
   const isFormComplete = isNameValid && isPhoneValid;
+
+  if (!isOpen) return null;
 
   const handleNameChange = (e) => {
     const raw = e.target.value;
