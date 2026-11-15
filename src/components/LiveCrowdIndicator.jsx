@@ -34,7 +34,7 @@ export default function LiveCrowdIndicator({ onOpenReservation }) {
                 Real-Time Hall Occupancy & Seating
               </h2>
               <p className="text-sm text-slate-300 leading-relaxed">
-                Check current crowd density before arriving at Unimart Gulshan 2. With 600+ seats spanning four distinct ambiance zones, walk-ins find seating smoothly.
+                Check current crowd density before arriving at Abdullah Bhaban, Kazir Dewri. With 600+ seats spanning four distinct ambiance zones, walk-ins find seating smoothly.
               </p>
               <div className="pt-2 flex items-center gap-4 text-xs text-slate-400">
                 <span className="flex items-center gap-1.5 text-slate-300">

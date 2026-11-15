@@ -86,6 +86,7 @@ export default function ReservationModal({ isOpen, onClose, initialZone }) {
         name: sanitizedName,
         phone: sanitizedPhone,
         code: resCode,
+        zone: initialZone || 'Main Hall / Garden Atrium',
         date: new Date().toLocaleDateString('en-GB'),
         time: 'Evening (11:00 AM – 11:30 PM)',
         location: 'Abdullah Bhaban, Kazir Dewri, Chattogram',
@@ -178,6 +179,10 @@ END:VCALENDAR`;
               <div className="flex justify-between text-slate-300">
                 <span className="text-slate-400">Mobile No</span>
                 <span className="font-mono font-medium text-emerald-400">{confirmedReservation.phone}</span>
+              </div>
+              <div className="flex justify-between text-slate-300">
+                <span className="text-slate-400">Selected Zone</span>
+                <span className="font-medium text-amber-300">{confirmedReservation.zone}</span>
               </div>
               <div className="flex justify-between text-slate-300">
                 <span className="text-slate-400">Address</span>

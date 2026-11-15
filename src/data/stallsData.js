@@ -1,4 +1,4 @@
-// Authentic Chef's Table Gulshan 2 stalls and non-duplicating menus
+// Authentic Radhuni Table Kazir Dewri stalls and non-duplicating menus
 export const stallsData = [
   {
     id: 'darbar',
@@ -68,7 +68,7 @@ export const stallsData = [
     prepTime: '12-18 min',
     image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80',
     coverImage: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80',
-    description: 'Direct from Istanbul to Gulshan: smoky shish kebabs grilled over imported lump charcoal, wrapped in fresh lavash with garlic toum and sumac onions.',
+    description: 'Direct from Istanbul to Chattogram: smoky shish kebabs grilled over imported lump charcoal, wrapped in fresh lavash with garlic toum and sumac onions.',
     specialty: 'Sultan Mixed Kebab Platter',
     badge: 'Trending',
     menu: [
@@ -115,7 +115,7 @@ export const stallsData = [
     prepTime: '10-15 min',
     image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80',
     coverImage: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=1200&q=80',
-    description: 'Dhaka’s cult-favorite smash burgers made from 100% freshly ground prime beef, butter-toasted brioche buns, and house-made mad sauce.',
+    description: 'Chattogram’s favorite smash burgers made from 100% freshly ground prime beef, butter-toasted brioche buns, and house-made mad sauce.',
     specialty: 'The Truffle Smashed Double',
     badge: 'Crowd Favorite',
     menu: [
