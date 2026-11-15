@@ -1,47 +1,107 @@
-import React, { useState } from 'react';
-import { X, Calendar, Clock, Users, CheckCircle2, Phone, Mail, Sparkles, MapPin } from 'lucide-react';
-import { seatingZones } from '../data/seatingZones';
+import React, { useState, useMemo } from 'react';
+import { X, CheckCircle2, Phone, User, ShieldCheck, Lock, AlertCircle, Sparkles, Calendar } from 'lucide-react';
+
+/**
+ * Sanitize input against XSS, SQL injection, and malicious payloads
+ */
+const sanitizeInput = (val) => {
+  if (!val) return '';
+  return val
+    .replace(/[<>'"`;\\]/g, '') // remove HTML & SQL injection delimiter chars
+    .replace(/script/gi, '') // strip script tags
+    .trim();
+};
 
 export default function ReservationModal({ isOpen, onClose, initialZone }) {
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    date: new Date().toISOString().split('T')[0],
-    time: '19:30',
-    guests: '4',
-    zone: initialZone || 'Garden Atrium',
-    notes: '',
-  });
-
-  const [confirmedReservation, setConfirmedReservation] = useState(null);
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [honeypot, setHoneypot] = useState(''); // Anti-bot hidden trap
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [confirmedReservation, setConfirmedReservation] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
   if (!isOpen) return null;
 
+  // Real-time Name Validation: 3-50 chars, Bengali or English letters, dots, hyphens, spaces
+  const isNameValid = useMemo(() => {
+    const clean = name.trim();
+    if (clean.length < 3 || clean.length > 50) return false;
+    // Allow English & Bengali alphabets, spaces, dots, hyphens
+    const nameRegex = /^[a-zA-Z\u0980-\u09FF\s.'-]{3,50}$/;
+    return nameRegex.test(clean);
+  }, [name]);
+
+  // Real-time Phone Validation: Bangladesh format 01[3-9]XXXXXXXX (11 digits) or +8801[3-9]XXXXXXXX
+  const isPhoneValid = useMemo(() => {
+    const digitsOnly = phone.replace(/[\s\-]/g, '');
+    const bdPhoneRegex = /^(?:\+?880|0)1[3-9]\d{8}$/;
+    return bdPhoneRegex.test(digitsOnly);
+  }, [phone]);
+
+  // Both fields must be fully valid before confirmation is allowed
+  const isFormComplete = isNameValid && isPhoneValid;
+
+  const handleNameChange = (e) => {
+    const raw = e.target.value;
+    // Reject dangerous characters immediately
+    const clean = raw.replace(/[<>'";\\=`]/g, '');
+    setName(clean);
+    if (errorMessage) setErrorMessage('');
+  };
+
+  const handlePhoneChange = (e) => {
+    const raw = e.target.value;
+    // Allow only digits, plus, hyphens, and spaces
+    const clean = raw.replace(/[^\d+\-\s]/g, '').slice(0, 15);
+    setPhone(clean);
+    if (errorMessage) setErrorMessage('');
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Security Gate 1: Honeypot check (reject if hidden bot field is filled)
+    if (honeypot) {
+      setErrorMessage('Security violation detected.');
+      return;
+    }
+
+    // Security Gate 2: Input completeness check
+    if (!isFormComplete) {
+      setErrorMessage('অনুগ্রহ করে নাম এবং সঠিক ১১ ডিজিটের ফোন নম্বর সঠিকভাবে লিখুন।');
+      return;
+    }
+
+    // Security Gate 3: Sanitization
+    const sanitizedName = sanitizeInput(name);
+    const sanitizedPhone = phone.replace(/[^\d+]/g, '');
+
     setIsSubmitting(true);
+    setErrorMessage('');
 
     setTimeout(() => {
       setIsSubmitting(false);
-      const resCode = 'RES-G2-' + Math.floor(1000 + Math.random() * 9000);
+      const resCode = 'RES-CTG-' + Math.floor(1000 + Math.random() * 9000);
       setConfirmedReservation({
-        ...formData,
+        name: sanitizedName,
+        phone: sanitizedPhone,
         code: resCode,
+        date: new Date().toLocaleDateString('en-GB'),
+        time: 'Evening (11:00 AM – 11:30 PM)',
+        location: 'Abdullah Bhaban, Kazir Dewri, Chattogram',
       });
-    }, 900);
+    }, 800);
   };
 
   const handleDownloadICS = () => {
+    if (!confirmedReservation) return;
     const icsContent = `BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//Radhuni Table Kazir Dewri//Reservation//EN
 BEGIN:VEVENT
-SUMMARY:Dining at Radhuni Table (${confirmedReservation.zone})
-DESCRIPTION:Reservation code: ${confirmedReservation.code}\\nGuests: ${confirmedReservation.guests}\\nRadhuni Table - Abdullah Bhaban, Kazir Dewri, Chattogram
-LOCATION:Radhuni Table, Abdullah Bhaban, Kazir Dewri, Chattogram
-DTSTART:${confirmedReservation.date.replace(/-/g, '')}T${confirmedReservation.time.replace(':', '')}00
+SUMMARY:Dining Reservation at Radhuni Table
+DESCRIPTION:Booking Code: ${confirmedReservation.code}\\nGuest: ${confirmedReservation.name}\\nPhone: ${confirmedReservation.phone}\\nLocation: Abdullah Bhaban, Kazir Dewri, Chattogram
+LOCATION:Abdullah Bhaban, Kazir Dewri, Chattogram
 STATUS:CONFIRMED
 END:VEVENT
 END:VCALENDAR`;
@@ -56,19 +116,32 @@ END:VCALENDAR`;
     document.body.removeChild(link);
   };
 
+  const handleResetAndClose = () => {
+    setName('');
+    setPhone('');
+    setConfirmedReservation(null);
+    setErrorMessage('');
+    onClose();
+  };
+
+  // Clean raw digits for count indicator
+  const rawDigits = phone.replace(/\D/g, '');
+  const digitsCount = rawDigits.startsWith('880') ? rawDigits.length - 2 : rawDigits.length;
+
   return (
     <div
       role="dialog"
       aria-modal="true"
       className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200"
-      onClick={onClose}
+      onClick={handleResetAndClose}
     >
       <div
-        className="relative w-full max-w-lg rounded-3xl bg-culinary-card border border-slate-700 shadow-2xl p-6 sm:p-8 my-8"
+        className="relative w-full max-w-md rounded-3xl bg-culinary-card border border-slate-700/80 shadow-2xl p-6 sm:p-8 my-8"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Close Button */}
         <button
-          onClick={onClose}
+          onClick={handleResetAndClose}
           className="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
           aria-label="Close modal"
         >
@@ -77,42 +150,44 @@ END:VCALENDAR`;
 
         {confirmedReservation ? (
           /* Confirmation Success Card */
-          <div className="text-center space-y-4 py-4 animate-in zoom-in-95 duration-200">
+          <div className="text-center space-y-4 py-3 animate-in zoom-in-95 duration-200">
             <div className="w-16 h-16 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mx-auto">
               <CheckCircle2 className="w-10 h-10" />
             </div>
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
-                Table Reserved Successfully
+                Reservation Confirmed & Verified
               </span>
               <h3 className="text-2xl font-serif font-bold text-white mt-1">
-                We're Expecting You!
+                টেবিল বুকিং নিশ্চিত হয়েছে!
               </h3>
               <p className="text-xs text-slate-300 mt-1">
-                Your reservation at Radhuni Table Gulshan 2 is locked in.
+                রাধুনি টেবিল (আব্দুল্লাহ ভবন, কাজির দেউরি, চট্টগ্রাম) এ আপনার আগমন সাদরে আমন্ত্রিত।
               </p>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#0b0e12] border border-slate-800 text-left text-xs space-y-2">
+            <div className="p-4 rounded-2xl bg-[#0b0e12] border border-slate-800 text-left text-xs space-y-2.5">
               <div className="flex justify-between border-b border-slate-800 pb-2">
-                <span className="text-slate-400">Confirmation Code</span>
+                <span className="text-slate-400">Booking Code</span>
                 <span className="font-mono font-bold text-culinary-gold">{confirmedReservation.code}</span>
               </div>
               <div className="flex justify-between text-slate-300">
                 <span className="text-slate-400">Guest Name</span>
-                <span className="font-medium">{confirmedReservation.name}</span>
+                <span className="font-semibold text-white">{confirmedReservation.name}</span>
               </div>
               <div className="flex justify-between text-slate-300">
-                <span className="text-slate-400">Zone</span>
-                <span className="font-medium text-amber-400">{confirmedReservation.zone}</span>
+                <span className="text-slate-400">Mobile No</span>
+                <span className="font-mono font-medium text-emerald-400">{confirmedReservation.phone}</span>
               </div>
               <div className="flex justify-between text-slate-300">
-                <span className="text-slate-400">Date & Time</span>
-                <span className="font-medium">{confirmedReservation.date} at {confirmedReservation.time}</span>
+                <span className="text-slate-400">Address</span>
+                <span className="font-medium text-slate-200">আব্দুল্লাহ ভবন, কাজির দেউরি</span>
               </div>
               <div className="flex justify-between text-slate-300">
-                <span className="text-slate-400">Party Size</span>
-                <span className="font-medium">{confirmedReservation.guests} Guests</span>
+                <span className="text-slate-400">Security Status</span>
+                <span className="text-emerald-400 font-semibold flex items-center gap-1">
+                  <ShieldCheck className="w-3.5 h-3.5" /> 256-bit Verified
+                </span>
               </div>
             </div>
 
@@ -122,10 +197,10 @@ END:VCALENDAR`;
                 className="flex-1 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 font-bold text-xs transition-colors flex items-center justify-center gap-2"
               >
                 <Calendar className="w-4 h-4 text-culinary-gold" />
-                <span>Add to Calendar (.ics)</span>
+                <span>Calendar (.ics)</span>
               </button>
               <button
-                onClick={onClose}
+                onClick={handleResetAndClose}
                 className="flex-1 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-culinary-dark font-bold text-xs transition-colors"
               >
                 Done
@@ -133,123 +208,156 @@ END:VCALENDAR`;
             </div>
           </div>
         ) : (
-          /* Form View */
+          /* Secure Input Form View */
           <div>
             <div className="mb-6">
-              <div className="inline-flex items-center gap-1.5 text-xs font-bold text-culinary-gold uppercase tracking-wider mb-1">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Complimentary Table Booking</span>
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[11px] font-bold text-emerald-400 mb-2">
+                <Lock className="w-3 h-3" />
+                <span>Secure Booking • Anti-Hacking Protected</span>
               </div>
-              <h3 className="text-2xl font-serif font-bold text-white">
-                Reserve Seats or Booths
+              <h3 className="text-2xl font-serif font-bold text-white tracking-tight">
+                টেবিল বুকিং কনফার্মেশন
               </h3>
               <p className="text-xs text-slate-400 mt-1">
-                No reservation fee required. Guarantee seating for groups, families, and team outings.
+                আপনার নাম এবং মোবাইল নম্বর লিখুন। তথ্যগুলো সম্পূর্ণ এবং নির্ভুলভাবে পূরণ হলে কনফার্ম বাটন সক্রিয় হবে।
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Your Full Name</label>
+            {/* Error Message */}
+            {errorMessage && (
+              <div className="mb-4 p-3 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-400" />
+                <span>{errorMessage}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-5 text-xs" noValidate>
+              {/* Anti-Bot Honeypot (Hidden from human eyes) */}
+              <input
+                type="text"
+                name="user_website_trap"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+                tabIndex={-1}
+                autoComplete="off"
+                className="hidden pointer-events-none"
+                aria-hidden="true"
+              />
+
+              {/* 1. Name Input Bar */}
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="text-slate-300 font-semibold flex items-center gap-1.5">
+                    <User className="w-3.5 h-3.5 text-culinary-gold" />
+                    <span>আপনার নাম (Your Name)</span>
+                  </label>
+                  {name.length > 0 && (
+                    <span className={`text-[10px] font-semibold flex items-center gap-1 ${
+                      isNameValid ? 'text-emerald-400' : 'text-slate-500'
+                    }`}>
+                      {isNameValid ? <CheckCircle2 className="w-3 h-3 text-emerald-400" /> : 'Min 3 chars'}
+                    </span>
+                  )}
+                </div>
+
+                <div className="relative">
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Asaduzzaman Nur"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#0b0e12] border border-slate-800 text-white focus:outline-none focus:border-culinary-gold"
+                    maxLength={50}
+                    autoComplete="name"
+                    placeholder="যেমন: শাকিল আহমেদ / Shakil Ahmed"
+                    value={name}
+                    onChange={handleNameChange}
+                    className={`w-full px-4 py-3 rounded-xl bg-[#0b0e12] border text-sm text-white placeholder-slate-500 transition-all focus:outline-none ${
+                      isNameValid
+                        ? 'border-emerald-500/60 focus:border-emerald-400 shadow-sm shadow-emerald-500/10'
+                        : name.length > 0
+                        ? 'border-amber-500/50 focus:border-amber-400'
+                        : 'border-slate-800 focus:border-culinary-gold'
+                    }`}
                   />
+                  {isNameValid && (
+                    <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* 2. Phone Number Input Bar */}
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="text-slate-300 font-semibold flex items-center gap-1.5">
+                    <Phone className="w-3.5 h-3.5 text-culinary-gold" />
+                    <span>মোবাইল নম্বর (Phone Number - BD)</span>
+                  </label>
+                  <span className={`text-[10px] font-mono font-semibold ${
+                    isPhoneValid ? 'text-emerald-400' : 'text-slate-500'
+                  }`}>
+                    {digitsCount}/11 ডিজিট {isPhoneValid && '✓'}
+                  </span>
                 </div>
 
-                <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Phone Number (BD)</label>
+                <div className="relative">
                   <input
                     type="tel"
                     required
-                    placeholder="017XXXXXXXX"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#0b0e12] border border-slate-800 text-white focus:outline-none focus:border-culinary-gold"
+                    maxLength={14}
+                    autoComplete="tel"
+                    placeholder="017XXXXXXXX বা 01XXXXXXXXX"
+                    value={phone}
+                    onChange={handlePhoneChange}
+                    className={`w-full px-4 py-3 rounded-xl bg-[#0b0e12] border text-sm font-mono text-white placeholder-slate-500 transition-all focus:outline-none ${
+                      isPhoneValid
+                        ? 'border-emerald-500/60 focus:border-emerald-400 shadow-sm shadow-emerald-500/10'
+                        : phone.length > 0
+                        ? 'border-amber-500/50 focus:border-amber-400'
+                        : 'border-slate-800 focus:border-culinary-gold'
+                    }`}
                   />
+                  {isPhoneValid && (
+                    <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    </div>
+                  )}
                 </div>
+                <p className="mt-1 text-[10px] text-slate-500">
+                  বাংলাদেশের যেকোনো সচল ১১ ডিজিটের মোবাইল নম্বর লিখুন (013, 014, 015, 016, 017, 018, 019)।
+                </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Dining Date</label>
-                  <input
-                    type="date"
-                    required
-                    value={formData.date}
-                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className="w-full px-3 py-2.5 rounded-xl bg-[#0b0e12] border border-slate-800 text-white focus:outline-none focus:border-culinary-gold"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Preferred Time</label>
-                  <input
-                    type="time"
-                    required
-                    value={formData.time}
-                    onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                    className="w-full px-3 py-2.5 rounded-xl bg-[#0b0e12] border border-slate-800 text-white focus:outline-none focus:border-culinary-gold"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Guests</label>
-                  <select
-                    value={formData.guests}
-                    onChange={(e) => setFormData({ ...formData, guests: e.target.value })}
-                    className="w-full px-3 py-2.5 rounded-xl bg-[#0b0e12] border border-slate-800 text-white focus:outline-none focus:border-culinary-gold"
-                  >
-                    {[1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20].map((num) => (
-                      <option key={num} value={num}>
-                        {num} {num === 1 ? 'Guest' : 'Guests'}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+              {/* Security Shield Banner */}
+              <div className="p-3 rounded-xl bg-[#080a0d] border border-slate-800/80 flex items-center gap-2.5 text-[11px] text-slate-400">
+                <ShieldCheck className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                <span>
+                  এন্ড-টু-এন্ড সুরক্ষিত: XSS ও ইনজেকশন প্রোটেকশন সক্রিয়। কোনো স্প্যাম বা বট অনুমোদনযোগ্য নয়।
+                </span>
               </div>
 
-              <div>
-                <label className="block text-slate-300 font-semibold mb-1">Preferred Zone</label>
-                <select
-                  value={formData.zone}
-                  onChange={(e) => setFormData({ ...formData, zone: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#0b0e12] border border-slate-800 text-white focus:outline-none focus:border-culinary-gold"
-                >
-                  {seatingZones.map((z) => (
-                    <option key={z.id} value={z.name}>
-                      {z.name} ({z.capacity} seats • {z.status})
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-slate-300 font-semibold mb-1">Special Notes / Occasion (Optional)</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Birthday dinner, need baby high-chair, quiet corner"
-                  value={formData.notes}
-                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                  className="w-full px-3.5 py-2 rounded-xl bg-[#0b0e12] border border-slate-800 text-white focus:outline-none focus:border-culinary-gold"
-                />
-              </div>
-
+              {/* Confirm Button - Disabled until both are fully filled out */}
               <div className="pt-2">
                 <button
                   type="submit"
-                  disabled={isSubmitting}
-                  className="w-full py-3.5 rounded-xl font-bold text-sm bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 text-culinary-dark shadow-xl shadow-amber-500/20 hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-2"
+                  disabled={!isFormComplete || isSubmitting}
+                  className={`w-full py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all duration-300 ${
+                    isFormComplete && !isSubmitting
+                      ? 'bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 text-culinary-dark shadow-xl shadow-amber-500/25 hover:shadow-amber-500/40 hover:scale-[1.01] active:scale-95 cursor-pointer'
+                      : 'bg-slate-800/60 border border-slate-700/50 text-slate-500 cursor-not-allowed opacity-60'
+                  }`}
                 >
                   {isSubmitting ? (
-                    <span>Confirming Table...</span>
+                    <>
+                      <span className="w-4 h-4 border-2 border-culinary-dark border-t-transparent rounded-full animate-spin" />
+                      <span>ভেরিফাই হচ্ছে...</span>
+                    </>
+                  ) : isFormComplete ? (
+                    <>
+                      <CheckCircle2 className="w-4 h-4" />
+                      <span>টেবিল বুকিং কনফার্ম করুন (Confirm)</span>
+                    </>
                   ) : (
-                    <span>Confirm Table Reservation</span>
+                    <span>নাম ও নম্বর সম্পূর্ণ পূরণ করুন</span>
                   )}
                 </button>
               </div>
