@@ -15,20 +15,33 @@ export default function ReviewsSection() {
 
   const googleMapsUrl = "https://maps.app.goo.gl/hRYZ4iKM5BJ1Xf3x5";
 
+  const sanitizeText = (val, maxLen = 500) => {
+    if (!val) return '';
+    return val
+      .replace(/[<>'";\\=`]/g, '')
+      .replace(/script/gi, '')
+      .trim()
+      .slice(0, maxLen);
+  };
+
   const handleReviewSubmit = (e) => {
     e.preventDefault();
-    if (!newReview.author || !newReview.comment) return;
+    const cleanAuthor = sanitizeText(newReview.author, 50);
+    const cleanComment = sanitizeText(newReview.comment, 500);
+    const cleanFavorite = sanitizeText(newReview.favorite, 80);
+
+    if (!cleanAuthor || !cleanComment) return;
 
     const userEntry = {
       id: 'rev-user-' + Date.now(),
-      author: newReview.author,
+      author: cleanAuthor,
       role: 'Verified Foodie',
       avatar: '',
-      rating: Number(newReview.rating),
+      rating: Math.min(5, Math.max(1, Number(newReview.rating) || 5)),
       date: 'Just now',
       source: 'Direct Review',
-      comment: newReview.comment,
-      favoriteItems: newReview.favorite ? [newReview.favorite] : ['Radhuni Table Signature'],
+      comment: cleanComment,
+      favoriteItems: cleanFavorite ? [cleanFavorite] : ['Radhuni Table Signature'],
       verifiedDiner: true,
     };
 

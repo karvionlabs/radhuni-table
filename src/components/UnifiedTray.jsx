@@ -25,7 +25,7 @@ export default function UnifiedTray({ isOpen, onClose, cartItems, onUpdateQuanti
     setTimeout(() => {
       setIsProcessing(false);
       const orderTicket = {
-        orderId: 'CT-G2-' + Math.floor(100000 + Math.random() * 900000),
+        orderId: 'RT-CTG-' + Math.floor(100000 + Math.random() * 900000),
         placedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         itemsCount: cartItems.reduce((sum, i) => sum + i.quantity, 0),
         stallsCount: Object.keys(groupedByStall).length,
