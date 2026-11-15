@@ -87,7 +87,7 @@ export default function UnifiedTray({ isOpen, onClose, cartItems, onUpdateQuanti
                 Enjoy Your Feast!
               </h3>
               <p className="text-xs text-slate-300 mt-1 max-w-xs">
-                Your order has been routed to the respective kitchen counters at Radhuni Table Gulshan 2.
+                Your order has been routed to the respective kitchen counters at Radhuni Table, Kazir Dewri.
               </p>
             </div>
 

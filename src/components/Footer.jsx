@@ -2,7 +2,7 @@ import React from 'react';
 import { UtensilsCrossed, MapPin, Phone, Mail, ExternalLink, Heart } from 'lucide-react';
 
 export default function Footer({ onOpenReservation, onOpenTray }) {
-  const googleMapsUrl = "https://maps.app.goo.gl/hRYZ4iKM5BJ1Xf3x5";
+  const googleMapsUrl = "https://www.google.com/maps/search/?api=1&query=Abdullah+Bhaban,+Kazir+Dewri,+Chattogram";
 
   return (
     <footer className="bg-[#07090b] text-slate-400 border-t border-slate-800/80 pt-16 pb-12 text-xs">
@@ -22,7 +22,7 @@ export default function Footer({ onOpenReservation, onOpenTray }) {
             </div>
 
             <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-sm">
-              Dhaka's pioneer upscale multi-cuisine food court at Unimart Gulshan 2. 
+              Chattogram's premier upscale multi-cuisine food hall at Abdullah Bhaban, Kazir Dewri. 
               Featuring over 20 non-overlapping specialty culinary stalls and 600+ open communal seats.
             </p>
 
@@ -98,19 +98,19 @@ export default function Footer({ onOpenReservation, onOpenTray }) {
               Hours & Location
             </h4>
             <p className="text-slate-300">
-              Level 2, Unimart, Gulshan Centre Point, Road 90, Gulshan 2, Dhaka 1212
+              Abdullah Bhaban, Kazir Dewri, Chattogram 4000, Bangladesh
             </p>
             <div className="space-y-1 text-slate-300">
               <p><strong className="text-white">Daily:</strong> 11:00 AM – 11:30 PM</p>
               <p><strong className="text-white">Seating:</strong> Walk-in & Reserved</p>
-              <p><strong className="text-white">Parking:</strong> Unimart Basement 1 & 2</p>
+              <p><strong className="text-white">Parking:</strong> Abdullah Bhaban Parking Area</p>
             </div>
           </div>
         </div>
 
         {/* Bottom Bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-500 text-[11px]">
-          <p>© {new Date().getFullYear()} Radhuni Table Gulshan 2. Inspired by Dhaka’s premiere food hall culture.</p>
+          <p>© {new Date().getFullYear()} Radhuni Table Chattogram. Inspired by authentic food hall culture.</p>
           <div className="flex items-center gap-1">
             <span>Crafted with passion for culinary excellence</span>
           </div>

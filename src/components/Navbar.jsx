@@ -44,11 +44,11 @@ export default function Navbar({ trayItemsCount, trayTotal, onOpenTray, onOpenRe
                   RADHUNI TABLE
                 </span>
                 <span className="hidden sm:inline-block px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider rounded-full bg-amber-500/15 text-culinary-gold border border-amber-500/30">
-                  Gulshan 2
+                  Kazir Dewri
                 </span>
               </div>
               <p className="text-xs text-slate-400 font-medium tracking-wide flex items-center gap-1">
-                <span>Unimart Level 2</span>
+                <span>Abdullah Bhaban, Chattogram</span>
                 <span className="text-emerald-400 font-semibold">• Live Today</span>
               </p>
             </div>

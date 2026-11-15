@@ -2,7 +2,7 @@ import React from 'react';
 import { MapPin, Navigation, Clock, Car, Phone, ExternalLink, ShieldCheck, Compass } from 'lucide-react';
 
 export default function LocationSection() {
-  const googleMapsUrl = "https://maps.app.goo.gl/hRYZ4iKM5BJ1Xf3x5";
+  const googleMapsUrl = "https://www.google.com/maps/search/?api=1&query=Abdullah+Bhaban,+Kazir+Dewri,+Chattogram";
 
   return (
     <section id="location" className="py-20 bg-culinary-dark border-t border-slate-800">
@@ -13,10 +13,10 @@ export default function LocationSection() {
             <span>Prime Location & Arrival Guide</span>
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">
-            Visit Radhuni Table at Gulshan 2
+            Visit Radhuni Table at Kazir Dewri
           </h2>
           <p className="mt-3 text-sm sm:text-base text-slate-300">
-            Perched on Level 2 above Unimart Superstore in the landmark Gulshan Centre Point.
+            Located at Abdullah Bhaban, in the bustling heart of Kazir Dewri, Chattogram.
           </p>
         </div>
 
@@ -32,10 +32,10 @@ export default function LocationSection() {
                   </div>
                   <div>
                     <h3 className="text-base font-bold text-white">Full Address</h3>
-                    <p className="text-xs sm:text-sm text-slate-300 mt-1 leading-relaxed">
-                      Level 2, Unimart, Gulshan Centre Point,<br />
-                      Plot 23–26, Road 90, Gulshan 2,<br />
-                      Dhaka 1212, Bangladesh
+                    <p className="text-xs sm:text-sm text-slate-200 mt-1 leading-relaxed">
+                      <strong className="text-white">Abdullah Bhaban</strong> (আব্দুল্লাহ ভবন),<br />
+                      Kazir Dewri (কাজির দেউরি),<br />
+                      Chattogram 4000, Bangladesh
                     </p>
                     <div className="mt-3 pt-3 border-t border-slate-800/80 flex items-center gap-3">
                       <a
@@ -88,7 +88,7 @@ export default function LocationSection() {
                   <div>
                     <h3 className="text-base font-bold text-white">Parking & Access</h3>
                     <p className="text-xs sm:text-sm text-slate-300 mt-1 leading-relaxed">
-                      Ample secure multi-level underground basement parking available at Unimart. Dedicated elevator access directly to Level 2 Radhuni Table.
+                      Convenient parking available at Abdullah Bhaban and adjacent Kazir Dewri commercial area. Easy accessibility from SS Khaled Road and Kazir Dewri Circle.
                     </p>
                   </div>
                 </div>
@@ -110,18 +110,18 @@ export default function LocationSection() {
 
           {/* Right Map Canvas & Visual Card */}
           <div className="lg:col-span-7 rounded-3xl bg-culinary-card border border-slate-800 overflow-hidden shadow-2xl relative min-h-[460px] flex flex-col">
-            {/* Embedded Google Maps View centered on Chef's Table Gulshan 2 */}
+            {/* Embedded Google Maps View centered on Kazir Dewri, Chattogram */}
             <div className="relative flex-1 w-full min-h-[360px] overflow-hidden">
               <iframe
-                title="Radhuni Table Gulshan 2 Location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.0475355047814!2d90.41237317600868!3d23.795730778640702!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c7429b9b4369%3A0xb10937f2b0542529!2sChef's%20Table%20-%20Gulshan%202!5e0!3m2!1sen!2sbd!4v1700000000000!5m2!1sen!2sbd"
-                className="w-full h-full border-0 filter grayscale-[25%] contrast-[110%] opacity-90 hover:opacity-100 transition-opacity"
+                title="Radhuni Table Abdullah Bhaban Kazir Dewri Chattogram Location"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3689.915729177699!2d91.8242!3d22.3478!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30acd88b5b3b1237%3A0x6b3f7be52382c7f3!2sKazir%20Dewri%2C%20Chattogram%2C%20Bangladesh!5e0!3m2!1sen!2sbd!4v1700000000000"
+                className="w-full h-full border-0 filter grayscale-[20%] contrast-[110%] opacity-90 hover:opacity-100 transition-opacity"
                 loading="lazy"
                 allowFullScreen
               />
-              <div className="absolute top-4 left-4 bg-culinary-dark/90 backdrop-blur-md px-3.5 py-2 rounded-xl border border-slate-700 text-xs font-semibold text-slate-200 shadow-xl flex items-center gap-2">
+              <div className="absolute top-4 left-4 bg-culinary-dark/95 backdrop-blur-md px-3.5 py-2 rounded-xl border border-slate-700 text-xs font-semibold text-slate-200 shadow-xl flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-                <span>Radhuni Table • Gulshan Centre Point</span>
+                <span>Radhuni Table • Abdullah Bhaban, Kazir Dewri</span>
               </div>
             </div>
 
@@ -132,7 +132,7 @@ export default function LocationSection() {
                   Prefer Delivery to Home / Office?
                 </span>
                 <p className="text-xs text-slate-300">
-                  Select stalls deliver via official food delivery apps across Gulshan, Banani, and Baridhara.
+                  Select stalls deliver via official food delivery apps across Kazir Dewri, GEC, Jamal Khan, and central Chattogram.
                 </p>
               </div>
 

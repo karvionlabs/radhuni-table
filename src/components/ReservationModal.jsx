@@ -36,11 +36,11 @@ export default function ReservationModal({ isOpen, onClose, initialZone }) {
   const handleDownloadICS = () => {
     const icsContent = `BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//Radhuni Table Gulshan 2//Reservation//EN
+PRODID:-//Radhuni Table Kazir Dewri//Reservation//EN
 BEGIN:VEVENT
-SUMMARY:Dining at Radhuni Table Gulshan 2 (${confirmedReservation.zone})
-DESCRIPTION:Reservation code: ${confirmedReservation.code}\\nGuests: ${confirmedReservation.guests}\\nRadhuni Table - Level 2, Unimart Gulshan Centre Point, Road 90, Gulshan 2, Dhaka
-LOCATION:Radhuni Table, Unimart Level 2, Gulshan 2, Dhaka
+SUMMARY:Dining at Radhuni Table (${confirmedReservation.zone})
+DESCRIPTION:Reservation code: ${confirmedReservation.code}\\nGuests: ${confirmedReservation.guests}\\nRadhuni Table - Abdullah Bhaban, Kazir Dewri, Chattogram
+LOCATION:Radhuni Table, Abdullah Bhaban, Kazir Dewri, Chattogram
 DTSTART:${confirmedReservation.date.replace(/-/g, '')}T${confirmedReservation.time.replace(':', '')}00
 STATUS:CONFIRMED
 END:VEVENT

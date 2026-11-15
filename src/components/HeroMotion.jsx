@@ -3,7 +3,7 @@ import { Sparkles, MapPin, Compass, ArrowRight, ShieldCheck, Star, Users, Flame,
 import MotionCulinaryLoop from './MotionCulinaryLoop';
 
 export default function HeroMotion({ onExploreStalls, onOpenSeating, onOpenReservation }) {
-  const googleMapsUrl = "https://maps.app.goo.gl/hRYZ4iKM5BJ1Xf3x5";
+  const googleMapsUrl = "https://www.google.com/maps/search/?api=1&query=Abdullah+Bhaban,+Kazir+Dewri,+Chattogram";
 
   return (
     <section className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-16 overflow-hidden bg-gradient-to-b from-culinary-dark via-[#0d1117] to-culinary-dark">
@@ -23,7 +23,7 @@ export default function HeroMotion({ onExploreStalls, onOpenSeating, onOpenReser
           </span>
           <span className="text-emerald-400 font-bold">Open Today 11 AM - 11:30 PM</span>
           <span className="text-slate-500">•</span>
-          <span className="text-slate-300">Level 2, Unimart Gulshan 2</span>
+          <span className="text-slate-300">Abdullah Bhaban, Kazir Dewri</span>
           <a
             href={googleMapsUrl}
             target="_blank"
