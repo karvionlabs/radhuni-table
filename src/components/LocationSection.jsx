@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapPin, Navigation, Clock, Car, Phone, ExternalLink, ShieldCheck, Compass } from 'lucide-react';
+import { adminStorage } from '../services/adminStorageService';
 
 export default function LocationSection() {
+  const [siteConfig, setSiteConfig] = useState(() => adminStorage.getConfig());
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      setSiteConfig(adminStorage.getConfig());
+    };
+    window.addEventListener('radhuni_store_updated', handleUpdate);
+    return () => window.removeEventListener('radhuni_store_updated', handleUpdate);
+  }, []);
+
   const googleMapsUrl = "https://www.google.com/maps/search/?api=1&query=Abdullah+Bhaban,+Kazir+Dewri,+Chattogram";
 
   return (
-    <section id="location" className="py-20 bg-culinary-dark border-t border-slate-800">
+    <section id="location" className="scroll-mt-28 py-20 bg-culinary-dark border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-14">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20 text-culinary-gold text-xs font-semibold uppercase tracking-wider mb-2">
@@ -16,7 +27,7 @@ export default function LocationSection() {
             Visit Radhuni Table at Kazir Dewri
           </h2>
           <p className="mt-3 text-sm sm:text-base text-slate-300">
-            Located at Abdullah Bhaban, in the bustling heart of Kazir Dewri, Chattogram.
+            Located at {siteConfig.addressText || 'Abdullah Bhaban, in the bustling heart of Kazir Dewri, Chattogram'}.
           </p>
         </div>
 
@@ -60,19 +71,20 @@ export default function LocationSection() {
                     <Clock className="w-5 h-5 text-emerald-400" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-base font-bold text-white">Operating Hours</h3>
-                    <div className="mt-2 space-y-1 text-xs">
-                      <div className="flex justify-between text-slate-300">
-                        <span>Monday – Thursday:</span>
-                        <span className="font-semibold text-white">11:00 AM – 11:30 PM</span>
+                    <div className="flex items-center justify-between gap-2 flex-wrap">
+                      <h3 className="text-base font-bold text-white">Operating Hours</h3>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                        {siteConfig.operatingBadge || 'Open 7 Days'}
+                      </span>
+                    </div>
+                    <div className="mt-2.5 space-y-1.5 text-xs">
+                      <div className="flex flex-wrap justify-between items-center gap-1 text-slate-300">
+                        <span>Schedule:</span>
+                        <span className="font-semibold text-white">{siteConfig.operatingHoursLine1 || 'Saturday – Friday: 11:00 AM – 11:30 PM'}</span>
                       </div>
-                      <div className="flex justify-between text-slate-300">
-                        <span>Friday – Saturday:</span>
-                        <span className="font-semibold text-amber-300">11:00 AM – 11:30 PM (Peak)</span>
-                      </div>
-                      <div className="flex justify-between text-slate-300">
-                        <span>Sunday:</span>
-                        <span className="font-semibold text-white">11:00 AM – 11:30 PM</span>
+                      <div className="flex flex-wrap justify-between items-center gap-1 text-slate-300">
+                        <span>Weekend & Holidays:</span>
+                        <span className="font-semibold text-amber-300">{siteConfig.operatingHoursLine2 || 'Saturday – Sunday: Open All 7 Days (Every Day)'}</span>
                       </div>
                     </div>
                   </div>
@@ -100,7 +112,7 @@ export default function LocationSection() {
               href={googleMapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full py-4 rounded-2xl text-center font-bold text-sm bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 text-culinary-dark shadow-xl shadow-amber-500/25 hover:shadow-amber-500/40 hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-2"
+              className="w-full py-4 rounded-2xl text-center font-bold text-sm bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-slate-950 shadow-lg shadow-black/40 hover:shadow-amber-500/20 hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <Navigation className="w-4 h-4" />
               <span>Get Turn-by-Turn GPS Directions</span>
@@ -120,7 +132,6 @@ export default function LocationSection() {
                 allowFullScreen
               />
               <div className="absolute top-4 left-4 bg-culinary-dark/95 backdrop-blur-md px-3.5 py-2 rounded-xl border border-slate-700 text-xs font-semibold text-slate-200 shadow-xl flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
                 <span>Radhuni Table • Abdullah Bhaban, Kazir Dewri</span>
               </div>
             </div>

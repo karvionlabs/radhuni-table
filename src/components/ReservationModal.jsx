@@ -1,14 +1,35 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { X, CheckCircle2, Phone, User, ShieldCheck, Lock, AlertCircle, Sparkles, Calendar } from 'lucide-react';
+import { adminStorage } from '../services/adminStorageService';
 
 /**
- * Sanitize input against XSS, SQL injection, and malicious payloads
+ * Production-Grade Input Sanitizer
+ * Strips script tags, HTML tags, SQL injection delimiters, ASCII control chars, and zero-width spaces
  */
-const sanitizeInput = (val) => {
+const sanitizeInput = (val, maxLen = 50) => {
   if (!val) return '';
-  return val
-    .replace(/[<>'"`;\\]/g, '') // remove HTML & SQL injection delimiter chars
-    .replace(/script/gi, '') // strip script tags
+  return String(val)
+    .replace(/[\x00-\x1F\x7F-\x9F]/g, '') // remove ASCII control characters
+    .replace(/[\u200B-\u200D\uFEFF]/g, '') // remove zero-width spaces
+    .replace(/[<>'"`;\\=`]/g, '') // remove HTML & SQL injection delimiter chars
+    .replace(/javascript:/gi, '')
+    .replace(/data:/gi, '')
+    .replace(/script/gi, '')
+    .trim()
+    .slice(0, maxLen);
+};
+
+/**
+ * iCalendar CRLF & Delimiter Escape
+ * Prevents VEVENT property injection & header splitting
+ */
+const escapeICS = (str) => {
+  if (!str) return '';
+  return String(str)
+    .replace(/\\/g, '\\\\')
+    .replace(/;/g, '\\;')
+    .replace(/,/g, '\\,')
+    .replace(/[\r\n]+/g, ' ')
     .trim();
 };
 
@@ -19,6 +40,19 @@ export default function ReservationModal({ isOpen, onClose, initialZone }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmedReservation, setConfirmedReservation] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const [lastSubmitTime, setLastSubmitTime] = useState(0); // Rate limiter timestamp
+  const [submissionCount, setSubmissionCount] = useState(0); // Anti-spam quota
+
+  // Keyboard accessibility: Escape key listener
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') handleResetAndClose();
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
 
   // Real-time Name Validation: 3-50 chars, Bengali or English letters, dots, hyphens, spaces
   const isNameValid = useMemo(() => {
@@ -60,29 +94,45 @@ export default function ReservationModal({ isOpen, onClose, initialZone }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Security Gate 1: Honeypot check (reject if hidden bot field is filled)
+    // Security Gate 1: Honeypot check (reject if hidden bot trap is filled)
     if (honeypot) {
-      setErrorMessage('Security violation detected.');
+      setErrorMessage('Security violation detected: automated submission blocked.');
       return;
     }
 
-    // Security Gate 2: Input completeness check
+    // Security Gate 2: Rate Limiting & Cooldown Protection (anti-spam)
+    const now = Date.now();
+    if (now - lastSubmitTime < 8000) {
+      const waitSeconds = Math.ceil((8000 - (now - lastSubmitTime)) / 1000);
+      setErrorMessage(`অতিরিক্ত অনুরোধ রোধ করা হয়েছে। অনুগ্রহ করে ${waitSeconds} সেকেন্ড অপেক্ষা করুন। (Rate limited: please wait)`);
+      return;
+    }
+
+    if (submissionCount >= 5) {
+      setErrorMessage('সেশন লিমিট পূর্ণ হয়েছে। আরও বুকিংয়ের জন্য পেজটি রিফ্রেশ করুন বা সরাসরি কল করুন।');
+      return;
+    }
+
+    // Security Gate 3: Input completeness check
     if (!isFormComplete) {
       setErrorMessage('অনুগ্রহ করে নাম এবং সঠিক ১১ ডিজিটের ফোন নম্বর সঠিকভাবে লিখুন।');
       return;
     }
 
-    // Security Gate 3: Sanitization
-    const sanitizedName = sanitizeInput(name);
-    const sanitizedPhone = phone.replace(/[^\d+]/g, '');
+    // Security Gate 4: Sanitization & strict length validation
+    const sanitizedName = sanitizeInput(name, 50);
+    const sanitizedPhone = phone.replace(/[^\d+]/g, '').slice(0, 15);
 
     setIsSubmitting(true);
     setErrorMessage('');
+    setLastSubmitTime(now);
+    setSubmissionCount((prev) => prev + 1);
 
     setTimeout(() => {
       setIsSubmitting(false);
       const resCode = 'RES-CTG-' + Math.floor(1000 + Math.random() * 9000);
-      setConfirmedReservation({
+      const bookingRecord = {
+        id: 'res-' + Date.now(),
         name: sanitizedName,
         phone: sanitizedPhone,
         code: resCode,
@@ -90,19 +140,28 @@ export default function ReservationModal({ isOpen, onClose, initialZone }) {
         date: new Date().toLocaleDateString('en-GB'),
         time: 'Evening (11:00 AM – 11:30 PM)',
         location: 'Abdullah Bhaban, Kazir Dewri, Chattogram',
-      });
+        status: 'Confirmed',
+        createdAt: new Date().toISOString(),
+      };
+      setConfirmedReservation(bookingRecord);
+      adminStorage.addReservation(bookingRecord);
     }, 800);
   };
 
   const handleDownloadICS = () => {
     if (!confirmedReservation) return;
+    const safeCode = escapeICS(confirmedReservation.code);
+    const safeName = escapeICS(confirmedReservation.name);
+    const safePhone = escapeICS(confirmedReservation.phone);
+    const safeLocation = escapeICS(confirmedReservation.location);
+
     const icsContent = `BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//Radhuni Table Kazir Dewri//Reservation//EN
 BEGIN:VEVENT
 SUMMARY:Dining Reservation at Radhuni Table
-DESCRIPTION:Booking Code: ${confirmedReservation.code}\\nGuest: ${confirmedReservation.name}\\nPhone: ${confirmedReservation.phone}\\nLocation: Abdullah Bhaban, Kazir Dewri, Chattogram
-LOCATION:Abdullah Bhaban, Kazir Dewri, Chattogram
+DESCRIPTION:Booking Code: ${safeCode}\\nGuest: ${safeName}\\nPhone: ${safePhone}\\nLocation: ${safeLocation}
+LOCATION:${safeLocation}
 STATUS:CONFIRMED
 END:VEVENT
 END:VCALENDAR`;
@@ -216,15 +275,15 @@ END:VCALENDAR`;
           /* Secure Input Form View */
           <div>
             <div className="mb-6">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[11px] font-bold text-emerald-400 mb-2">
-                <Lock className="w-3 h-3" />
-                <span>Secure Booking • Anti-Hacking Protected</span>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-[11px] font-bold text-emerald-400 mb-3">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>Complimentary Table Reservation • Direct Confirmation</span>
               </div>
               <h3 className="text-2xl font-serif font-bold text-white tracking-tight">
-                টেবিল বুকিং কনফার্মেশন
+                Reserve Table • টেবিল বুকিং
               </h3>
-              <p className="text-xs text-slate-400 mt-1">
-                আপনার নাম এবং মোবাইল নম্বর লিখুন। তথ্যগুলো সম্পূর্ণ এবং নির্ভুলভাবে পূরণ হলে কনফার্ম বাটন সক্রিয় হবে।
+              <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
+                আপনার নাম ও ১১ ডিজিটের সচল মোবাইল নম্বর দিন। তথ্য সম্পূর্ণ ও নির্ভুল হলে সাথে সাথে কনফার্ম বাটন সক্রিয় হবে।
               </p>
             </div>
 
@@ -252,13 +311,13 @@ END:VCALENDAR`;
               {/* 1. Name Input Bar */}
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <label className="text-slate-300 font-semibold flex items-center gap-1.5">
+                  <label className="text-slate-200 font-semibold flex items-center gap-1.5">
                     <User className="w-3.5 h-3.5 text-culinary-gold" />
-                    <span>আপনার নাম (Your Name)</span>
+                    <span>আপনার নাম (Full Name)</span>
                   </label>
                   {name.length > 0 && (
                     <span className={`text-[10px] font-semibold flex items-center gap-1 ${
-                      isNameValid ? 'text-emerald-400' : 'text-slate-500'
+                      isNameValid ? 'text-emerald-400' : 'text-slate-400'
                     }`}>
                       {isNameValid ? <CheckCircle2 className="w-3 h-3 text-emerald-400" /> : 'Min 3 chars'}
                     </span>
@@ -293,12 +352,12 @@ END:VCALENDAR`;
               {/* 2. Phone Number Input Bar */}
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <label className="text-slate-300 font-semibold flex items-center gap-1.5">
+                  <label className="text-slate-200 font-semibold flex items-center gap-1.5">
                     <Phone className="w-3.5 h-3.5 text-culinary-gold" />
-                    <span>মোবাইল নম্বর (Phone Number - BD)</span>
+                    <span>মোবাইল নম্বর (BD Mobile Number)</span>
                   </label>
                   <span className={`text-[10px] font-mono font-semibold ${
-                    isPhoneValid ? 'text-emerald-400' : 'text-slate-500'
+                    isPhoneValid ? 'text-emerald-400' : 'text-slate-400'
                   }`}>
                     {digitsCount}/11 ডিজিট {isPhoneValid && '✓'}
                   </span>
@@ -333,10 +392,10 @@ END:VCALENDAR`;
               </div>
 
               {/* Security Shield Banner */}
-              <div className="p-3 rounded-xl bg-[#080a0d] border border-slate-800/80 flex items-center gap-2.5 text-[11px] text-slate-400">
+              <div className="p-3 rounded-xl bg-[#080a0d] border border-white/[0.08] flex items-center gap-2.5 text-[11px] text-slate-300">
                 <ShieldCheck className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                 <span>
-                  এন্ড-টু-এন্ড সুরক্ষিত: XSS ও ইনজেকশন প্রোটেকশন সক্রিয়। কোনো স্প্যাম বা বট অনুমোদনযোগ্য নয়।
+                  তাৎক্ষণিক আসন নিশ্চিতকরণ • কোনো অগ্রিম ফি নেই • সম্পূর্ণ সুরক্ষিত ভেরিফিকেশন
                 </span>
               </div>
 
@@ -359,7 +418,7 @@ END:VCALENDAR`;
                   ) : isFormComplete ? (
                     <>
                       <CheckCircle2 className="w-4 h-4" />
-                      <span>টেবিল বুকিং কনফার্ম করুন (Confirm)</span>
+                      <span>রিজার্ভেশন নিশ্চিত করুন • Confirm Table</span>
                     </>
                   ) : (
                     <span>নাম ও নম্বর সম্পূর্ণ পূরণ করুন</span>

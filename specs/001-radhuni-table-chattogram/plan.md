@@ -1,6 +1,6 @@
-# Implementation Plan: Chef's Table Gulshan 2 Digital Experience
+# Implementation Plan: Radhuni Table Kazir Dewri Digital Experience
 
-**Feature**: `001-chefs-table-gulshan`
+**Feature**: `001-radhuni-table-chattogram`
 **Architecture**: Single Page Application with React 18/19, Vite, Tailwind CSS, Lucide Icons, and Motion Graphics Canvas/Spring Physics.
 
 ## Tech Stack & Dependencies
@@ -36,12 +36,12 @@
 │   │   ├── SeatingMap.jsx         # Interactive 600-seat floor plan explorer
 │   │   ├── UnifiedTray.jsx        # Multi-stall cart drawer with checkout simulation
 │   │   ├── ReservationModal.jsx   # Table booking modal with confirmation
-│   │   ├── LocationSection.jsx    # Google Maps link, Unimart parking guide, hours
+│   │   ├── LocationSection.jsx    # Google Maps link, Abdullah Bhaban parking guide, hours
 │   │   ├── ReviewsSection.jsx     # Customer feedback & ratings
 │   │   ├── MotionCulinaryLoop.jsx # HTML5 Canvas ambient culinary particle & loop engine
-│   │   └── Footer.jsx             # Unimart Gulshan 2 contact, delivery partners, social
+│   │   └── Footer.jsx             # Abdullah Bhaban  contact, delivery partners, social
 └── specs/
-    └── 001-chefs-table-gulshan/
+    └── 001-radhuni-table-chattogram/
         ├── spec.md
         ├── plan.md
         └── tasks.md

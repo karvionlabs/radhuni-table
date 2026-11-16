@@ -7,7 +7,7 @@ export default function SeatingMap({ onSelectZoneForReservation }) {
   const activeZone = seatingZones.find((z) => z.id === activeZoneId) || seatingZones[0];
 
   return (
-    <section id="seating" className="py-20 bg-culinary-dark border-t border-slate-800">
+    <section id="seating" className="scroll-mt-28 py-20 bg-culinary-dark border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
@@ -32,7 +32,7 @@ export default function SeatingMap({ onSelectZoneForReservation }) {
               <button
                 key={zone.id}
                 onClick={() => setActiveZoneId(zone.id)}
-                className={`p-4 rounded-2xl border text-left transition-all spring-click ${
+                className={`p-4 rounded-2xl border text-left transition-all spring-click cursor-pointer ${
                   isSelected
                     ? 'bg-culinary-card border-culinary-gold shadow-lg shadow-amber-500/10'
                     : 'bg-[#0f1216] border-slate-800 hover:border-slate-700 text-slate-400'
@@ -65,6 +65,10 @@ export default function SeatingMap({ onSelectZoneForReservation }) {
             <img
               src={activeZone.image}
               alt={activeZone.name}
+              loading="lazy"
+              decoding="async"
+              width="800"
+              height="500"
               className="w-full h-full object-cover transition-all duration-700 hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-culinary-card via-culinary-card/30 to-transparent" />
@@ -133,7 +137,7 @@ export default function SeatingMap({ onSelectZoneForReservation }) {
             <div className="pt-4 border-t border-slate-800">
               <button
                 onClick={() => onSelectZoneForReservation(activeZone.name)}
-                className="w-full py-3.5 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-culinary-dark shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 spring-click"
+                className="w-full py-3.5 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-culinary-dark shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 spring-click cursor-pointer"
               >
                 <CalendarCheck className="w-4 h-4" />
                 <span>Reserve Seats in {activeZone.name}</span>

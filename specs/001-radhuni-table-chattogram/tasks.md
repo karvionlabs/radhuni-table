@@ -1,6 +1,6 @@
-# Tasks: Chef's Table Gulshan 2 Digital Experience
+# Tasks: Radhuni Table Kazir Dewri Digital Experience
 
-**Input**: Design documents from `/specs/001-chefs-table-gulshan/`
+**Input**: Design documents from `/specs/001-radhuni-table-chattogram/`
 **Prerequisites**: `spec.md`, `plan.md`
 
 ## Phase 1: Setup (Shared Infrastructure)
@@ -9,7 +9,7 @@
 - [X] T003 [P] Create base CSS animations and spring-curve utility classes in `src/index.css`
 
 ## Phase 2: Foundational (Data Models & Core Assets)
-- [X] T004 Create `src/data/stallsData.js` with 12 authentic Chef's Table Gulshan 2 food stalls and complete non-overlapping menus
+- [X] T004 Create `src/data/stallsData.js` with 12 authentic Radhuni Table Kazir Dewri food stalls and complete non-overlapping menus
 - [X] T005 [P] Create `src/data/seatingZones.js` covering 4 seating zones, live capacity, and ambiance metrics
 - [X] T006 [P] Create `src/data/reviewsData.js` with verified Google Maps dining reviews and ratings
 - [X] T007 [P] Create state management for Unified Tray / Cart and Active Filters in `src/App.jsx`
@@ -34,7 +34,7 @@
 - [X] T018 [US4] Implement `src/components/ReservationModal.jsx` with form validation, confirmation codes, and calendar export
 
 ## Phase 7: User Story 5 - Location, Hours, Reviews & Direct Google Maps Integration (P3)
-- [X] T019 [P] [US5] Build `src/components/LocationSection.jsx` featuring the verified Google Maps link (`https://maps.app.goo.gl/hRYZ4iKM5BJ1Xf3x5`), Unimart Level 2 directions, parking guidance, and operating hours
+- [X] T019 [P] [US5] Build `src/components/LocationSection.jsx` featuring the verified Google Maps link (`https://www.google.com/maps/search/?api=1&query=Abdullah+Bhaban,+Kazir+Dewri,+Chattogram`), Abdullah Bhaban Level 2 directions, parking guidance, and operating hours
 - [X] T020 [US5] Build `src/components/ReviewsSection.jsx` with rating breakdown, Google reviews filter, and user review submission modal
 - [X] T021 [US5] Build `src/components/Navbar.jsx` and `src/components/Footer.jsx` with quick navigation, social links, and delivery partner shortcuts
 

@@ -1,13 +1,13 @@
-# Feature Specification: Chef's Table Gulshan 2 - Signature Food Hall Digital Experience
+# Feature Specification: Radhuni Table Kazir Dewri - Signature Food Hall Digital Experience
 
-**Feature Branch**: `001-chefs-table-gulshan`
+**Feature Branch**: `001-radhuni-table-chattogram`
 **Created**: 2026-11-14
 **Status**: Ready for Implementation
-**Target URL**: `https://maps.app.goo.gl/hRYZ4iKM5BJ1Xf3x5` (Level 2, Unimart, Gulshan Centre Point, Road 90, Gulshan 2, Dhaka)
+**Target URL**: `https://www.google.com/maps/search/?api=1&query=Abdullah+Bhaban,+Kazir+Dewri,+Chattogram` (Level 2, Abdullah Bhaban, Kazir Dewri, Chattogram)
 
 ## Background & Value Proposition
-Chef's Table at Unimart Gulshan 2 is Dhaka's flagship upscale multi-cuisine food court, offering over 600 seats and 20+ specialized, non-overlapping food stalls ranging from gourmet Mughlai (Darbar), artisan pizzas (Pizza Guy), craft burgers (Madchef X), Mexican (Dos Locos), Far-Eastern Wok (Hakka Dhaka), coastal seafood (El Dorado) to healthy greens and Italian gelato. 
-The digital platform delivers a world-class, motion-graphics powered interactive website that brings the culinary vitality of Chef's Table Gulshan 2 to the screen, complete with interactive stall discovery, multi-stall unified tray ordering, live seating/crowd heat indicator, table reservations, and seamless navigation.
+Radhuni Table at Abdullah Bhaban  is Chattogram's flagship upscale multi-cuisine food court, offering over 600 seats and 20+ specialized, non-overlapping food stalls ranging from gourmet Mughlai (Darbar), artisan pizzas (Pizza Guy), craft burgers (Madchef X), Mexican (Dos Locos), Far-Eastern Wok (Hakka Chattogram), coastal seafood (El Dorado) to healthy greens and Italian gelato. 
+The digital platform delivers a world-class, motion-graphics powered interactive website that brings the culinary vitality of Radhuni Table Kazir Dewri to the screen, complete with interactive stall discovery, multi-stall unified tray ordering, live seating/crowd heat indicator, table reservations, and seamless navigation.
 
 ## User Scenarios & Testing
 
@@ -40,5 +40,5 @@ The digital platform delivers a world-class, motion-graphics powered interactive
 2. **Given** reservation form submission with valid phone number and guest count, **When** confirmed, **Then** toast displays confirmed booking code.
 
 ### User Story 5 - Location, Hours, Reviews & Direct Google Maps Integration (Priority: P3)
-**Goal**: Provide guests with precise arrival guidance to Unimart Level 2 Gulshan 2, direct Google Maps link, parking info, operating hours, delivery integrations, and genuine customer feedback.
+**Goal**: Provide guests with precise arrival guidance to Abdullah Bhaban Level 2 , direct Google Maps link, parking info, operating hours, delivery integrations, and genuine customer feedback.
 **Independent Test**: Click "Get Directions" opening the verified Google Maps URL, check opening hours (11:00 AM - 11:30 PM), filter customer reviews, and submit a review.

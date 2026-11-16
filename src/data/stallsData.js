@@ -199,8 +199,8 @@ export const stallsData = [
     ]
   },
   {
-    id: 'hakka-dhaka',
-    name: 'Hakka Dhaka',
+    id: 'hakka-ctg',
+    name: 'Hakka Chattogram',
     tagline: 'Szechuan Flame & Indo-Chinese Wok',
     category: 'Asian & Wok',
     stallNumber: 'Stall 06',
@@ -339,7 +339,7 @@ export const stallsData = [
     reviewsCount: 230,
     prepTime: '12-16 min',
     image: 'https://images.unsplash.com/photo-1534939561126-855b8675edd7?auto=format&fit=crop&w=800&q=80',
-    coverImage: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80',
+    coverImage: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=1200&q=80',
     description: 'Crisp golden sea fish fillets, butter-garlic giant prawns, and savory ocean platters freshly fried to order.',
     specialty: 'English Fish & Handcut Chips',
     badge: 'Fresh Catch',

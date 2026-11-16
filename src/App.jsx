@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import HeroMotion from './components/HeroMotion';
 import LiveCrowdIndicator from './components/LiveCrowdIndicator';
@@ -10,6 +10,7 @@ import ReservationModal from './components/ReservationModal';
 import LocationSection from './components/LocationSection';
 import ReviewsSection from './components/ReviewsSection';
 import Footer from './components/Footer';
+import AdminPortal from './components/admin/AdminPortal';
 
 export default function App() {
   const [cartItems, setCartItems] = useState([]);
@@ -17,6 +18,62 @@ export default function App() {
   const [selectedStall, setSelectedStall] = useState(null);
   const [isReservationOpen, setIsReservationOpen] = useState(false);
   const [reservationZone, setReservationZone] = useState('Garden Atrium');
+  
+  // Dedicated Separate Admin Portal State (Driven by URL hash or stealth hotkey)
+  const [isAdminOpen, setIsAdminOpen] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.location.hash === '#admin';
+    }
+    return false;
+  });
+
+  // Stealth Access Listeners: URL Hash, Hotkeys, and 5-Tap Crest Gesture
+  useEffect(() => {
+    // 1. Hash change listener (#admin)
+    const handleHashChange = () => {
+      setIsAdminOpen(window.location.hash === '#admin');
+    };
+    window.addEventListener('hashchange', handleHashChange);
+
+    // 2. Keyboard shortcut: Ctrl + Shift + A or Cmd + Shift + A
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        if (window.location.hash === '#admin' || isAdminOpen) {
+          window.location.hash = '';
+          setIsAdminOpen(false);
+        } else {
+          window.location.hash = 'admin';
+          setIsAdminOpen(true);
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
+    // 3. Custom stealth event from footer 5-tap crest
+    const handleStealthEvent = () => {
+      window.location.hash = 'admin';
+      setIsAdminOpen(true);
+    };
+    window.addEventListener('radhuni_open_admin', handleStealthEvent);
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('radhuni_open_admin', handleStealthEvent);
+    };
+  }, [isAdminOpen]);
+
+  // Handle exiting admin mode cleanly
+  const handleExitAdmin = () => {
+    window.location.hash = '';
+    setIsAdminOpen(false);
+  };
+
+  // If in Admin Mode, render the dedicated Full-Screen Admin Operations Portal
+  if (isAdminOpen) {
+    return <AdminPortal onExitAdmin={handleExitAdmin} />;
+  }
 
   // Map of added item IDs for instant checkmark on buttons
   const addedItemsMap = cartItems.reduce((acc, item) => {
@@ -24,13 +81,13 @@ export default function App() {
     return acc;
   }, {});
 
-  // Add item to Unified Tray
+  // Add item to Unified Tray with safety limits
   const handleAddToCart = (dish, stallName) => {
     setCartItems((prevItems) => {
       const existing = prevItems.find((i) => i.id === dish.id);
       if (existing) {
         return prevItems.map((i) =>
-          i.id === dish.id ? { ...i, quantity: i.quantity + 1 } : i
+          i.id === dish.id ? { ...i, quantity: Math.min(50, i.quantity + 1) } : i
         );
       }
       return [...prevItems, { ...dish, stallName, quantity: 1 }];
@@ -38,12 +95,14 @@ export default function App() {
   };
 
   const handleUpdateQuantity = (itemId, newQuantity) => {
-    if (newQuantity <= 0) {
+    const safeQty = Number(newQuantity) || 0;
+    if (safeQty <= 0) {
       handleRemoveItem(itemId);
       return;
     }
+    const clampedQty = Math.min(50, Math.max(1, Math.floor(safeQty)));
     setCartItems((prev) =>
-      prev.map((i) => (i.id === itemId ? { ...i, quantity: newQuantity } : i))
+      prev.map((i) => (i.id === itemId ? { ...i, quantity: clampedQty } : i))
     );
   };
 
@@ -72,7 +131,7 @@ export default function App() {
   const trayTotal = Math.round(traySubtotal * 1.05);
 
   return (
-    <div className="min-h-screen bg-culinary-dark text-slate-100 flex flex-col font-sans selection:bg-amber-500 selection:text-black">
+    <div className="min-h-screen bg-culinary-dark text-slate-100 flex flex-col font-sans selection:bg-amber-500 selection:text-black overflow-x-hidden w-full max-w-full">
       {/* Sticky Navbar */}
       <Navbar
         trayItemsCount={trayItemsCount}

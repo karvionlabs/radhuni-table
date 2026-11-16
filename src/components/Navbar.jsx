@@ -30,35 +30,31 @@ export default function Navbar({ trayItemsCount, trayTotal, onOpenTray, onOpenRe
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center justify-between gap-2 sm:gap-4">
           {/* Brand Identity */}
-          <a href="#" className="flex items-center gap-3 group flex-shrink-0">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 via-culinary-gold to-yellow-300 p-0.5 shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform duration-300">
+          <a href="#" className="flex items-center gap-2 sm:gap-3 group min-w-0">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-amber-600 via-culinary-gold to-yellow-300 p-0.5 shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform duration-300 flex-shrink-0">
               <div className="w-full h-full bg-culinary-dark rounded-[10px] flex items-center justify-center">
-                <UtensilsCrossed className="w-5 h-5 text-culinary-gold animate-pulse-subtle" />
+                <UtensilsCrossed className="w-4 h-4 sm:w-5 sm:h-5 text-culinary-gold" />
               </div>
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-serif text-lg sm:text-xl font-extrabold tracking-tight text-white group-hover:text-culinary-gold transition-colors whitespace-nowrap">
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <span className="font-serif text-base sm:text-xl font-extrabold tracking-tight text-white group-hover:text-culinary-gold transition-colors truncate">
                   RADHUNI TABLE
                 </span>
-                <span className="hidden sm:inline-block px-2 py-0.5 text-[9px] uppercase font-bold tracking-wider rounded-full bg-amber-500/15 text-culinary-gold border border-amber-500/30 whitespace-nowrap">
+                <span className="hidden sm:inline-block px-2.5 py-0.5 text-[9px] uppercase font-bold tracking-wider rounded-full bg-white/[0.06] text-amber-300 border border-amber-400/30 whitespace-nowrap">
                   Kazir Dewri
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 font-medium tracking-wide flex items-center gap-1.5 whitespace-nowrap">
+              <p className="text-[10px] sm:text-[11px] text-slate-400 font-medium tracking-wide flex items-center gap-1.5 truncate">
                 <span>Abdullah Bhaban, Ctg</span>
-                <span className="text-emerald-400 font-bold flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping inline-block" />
-                  Live Today
-                </span>
               </p>
             </div>
           </a>
 
           {/* Desktop Navigation - Professional Segmented Pill Bar */}
-          <nav className="hidden lg:flex items-center p-1 bg-slate-900/80 border border-slate-700/60 rounded-full backdrop-blur-xl shadow-lg shadow-black/40">
+          <nav className="hidden lg:flex items-center p-1 bg-[#12161A]/90 border border-white/[0.08] rounded-full backdrop-blur-xl shadow-xl shadow-black/60">
             {navLinks.map((link) => {
               const Icon = link.icon;
               return (
@@ -75,7 +71,7 @@ export default function Navbar({ trayItemsCount, trayTotal, onOpenTray, onOpenRe
           </nav>
 
           {/* Actions: Reservation & Unified Tray */}
-          <div className="flex items-center gap-2.5 flex-shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
             {/* Reserve Table Pill Button */}
             <button
               onClick={onOpenReservation}
@@ -88,7 +84,7 @@ export default function Navbar({ trayItemsCount, trayTotal, onOpenTray, onOpenRe
             {/* Tray Cart Button */}
             <button
               onClick={onOpenTray}
-              className="relative flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-culinary-dark shadow-md shadow-amber-500/25 transition-all hover:scale-105 active:scale-95 whitespace-nowrap"
+              className="relative flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-full text-xs font-extrabold bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-culinary-dark shadow-md shadow-amber-500/25 transition-all hover:scale-105 active:scale-95 whitespace-nowrap"
               aria-label="View unified dining tray"
             >
               <div className="relative">
@@ -110,8 +106,9 @@ export default function Navbar({ trayItemsCount, trayTotal, onOpenTray, onOpenRe
             {/* Mobile Menu Hamburger */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-xl bg-culinary-card border border-slate-700 text-slate-300 hover:text-white"
-              aria-label="Toggle menu"
+              className="lg:hidden min-w-[44px] min-h-[44px] p-2 rounded-xl bg-culinary-card border border-slate-700 text-slate-300 hover:text-white flex items-center justify-center cursor-pointer transition-colors"
+              aria-label="Toggle navigation menu"
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>

@@ -1,23 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { Users, Clock, Flame, Zap, CheckCircle2, ChevronRight, Info } from 'lucide-react';
+import { Users, Clock, Flame, ChefHat, CheckCircle2, ChevronRight, Info } from 'lucide-react';
 import { liveCrowdStats } from '../data/seatingZones';
+import { adminStorage } from '../services/adminStorageService';
 
 export default function LiveCrowdIndicator({ onOpenReservation }) {
-  const [occupancy, setOccupancy] = useState(liveCrowdStats.occupancyPercentage);
-  const [seated, setSeated] = useState(liveCrowdStats.currentlySeated);
+  const [stats, setStats] = useState(() => adminStorage.getCrowdStats());
+  const [occupancy, setOccupancy] = useState(stats.occupancyPercentage);
+  const [seated, setSeated] = useState(stats.currentlySeated);
 
-  // Micro-fluctuation simulation for realistic live tracking
+  // Sync with Admin Updates
   useEffect(() => {
-    const interval = setInterval(() => {
-      const delta = (Math.random() - 0.5) * 4;
-      setOccupancy((prev) => Math.min(94, Math.max(48, Math.round(prev + delta))));
-      setSeated((prev) => Math.min(580, Math.max(310, Math.round(prev + delta * 5))));
-    }, 8000);
-    return () => clearInterval(interval);
+    const handleUpdate = () => {
+      const fresh = adminStorage.getCrowdStats();
+      setStats(fresh);
+      setOccupancy(fresh.occupancyPercentage);
+      setSeated(fresh.currentlySeated);
+    };
+    window.addEventListener('radhuni_store_updated', handleUpdate);
+    return () => window.removeEventListener('radhuni_store_updated', handleUpdate);
   }, []);
 
+  // Subtle fluctuation around admin-set benchmark
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const delta = (Math.random() - 0.5) * 3;
+      setOccupancy((prev) => Math.min(100, Math.max(10, Math.round(stats.occupancyPercentage + delta))));
+      setSeated((prev) => Math.min(stats.totalCapacity || 600, Math.max(50, Math.round(stats.currentlySeated + delta * 3))));
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [stats]);
+
   return (
-    <section id="crowd-status" className="py-12 bg-culinary-dark border-y border-slate-800/80">
+    <section id="crowd-status" className="scroll-mt-28 py-12 bg-culinary-dark border-y border-slate-800/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="p-6 md:p-8 rounded-3xl bg-gradient-to-r from-culinary-card via-[#151a21] to-culinary-card border border-slate-700/60 shadow-2xl relative overflow-hidden">
           {/* Subtle Accent Glow */}
@@ -27,8 +41,8 @@ export default function LiveCrowdIndicator({ onOpenReservation }) {
             {/* Header info */}
             <div className="lg:col-span-5 space-y-3">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                <span>Live Food Hall Telemetry</span>
+                <Users className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Live Hall Seating & Ambiance</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white tracking-tight">
                 Real-Time Hall Occupancy & Seating
@@ -39,10 +53,10 @@ export default function LiveCrowdIndicator({ onOpenReservation }) {
               <div className="pt-2 flex items-center gap-4 text-xs text-slate-400">
                 <span className="flex items-center gap-1.5 text-slate-300">
                   <Clock className="w-4 h-4 text-culinary-gold" />
-                  Avg wait time: <strong className="text-white">~3 mins</strong>
+                  Avg wait time: <strong className="text-white">{stats.averageWaitTime || '~3 mins'}</strong>
                 </span>
                 <span className="flex items-center gap-1.5 text-slate-300">
-                  <Zap className="w-4 h-4 text-amber-400" />
+                  <ChefHat className="w-4 h-4 text-amber-400" />
                   Live Kitchens: <strong className="text-emerald-400">All 12 Active</strong>
                 </span>
               </div>

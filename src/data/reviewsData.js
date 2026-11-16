@@ -7,7 +7,7 @@ export const reviewsData = [
     rating: 5,
     date: '2 weeks ago',
     source: 'Google Maps Review',
-    comment: 'The gold standard for food courts in Chattogram. Darbar’s butter chicken with crisp garlic naan is unmatched anywhere in Kazir Dewri, and having Madchef and Hakka Dhaka in the same hall means no arguments with friends or family on what to eat. The seating is clean, modern, and air-conditioned.',
+    comment: 'The gold standard for food courts in Chattogram. Darbar’s butter chicken with crisp garlic naan is unmatched anywhere in Kazir Dewri, and having Madchef and Hakka Chattogram in the same hall means no arguments with friends or family on what to eat. The seating is clean, modern, and air-conditioned.',
     favoriteItems: ['Old Delhi Butter Chicken', 'Madchef Truffle Double', 'Garlic Naan'],
     verifiedDiner: true
   },
@@ -37,7 +37,7 @@ export const reviewsData = [
   },
   {
     id: 'rev-4',
-    author: 'Imran',
+    author: 'Abdullah Karif Shahjada',
     role: 'Architect & Designer',
     avatar: '',
     rating: 5,
@@ -52,7 +52,7 @@ export const reviewsData = [
 export const ratingSummary = {
   averageRating: 4.8,
   totalReviews: 4890,
-  googleMapsPlaceId: "0x3755c7429b9b4369:0xb10937f2b0542529",
+  locationVerified: "Abdullah Bhaban, Kazir Dewri, Chattogram",
   distribution: {
     5: 84,
     4: 12,

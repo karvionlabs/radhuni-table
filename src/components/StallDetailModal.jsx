@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { X, Star, Clock, ChefHat, Plus, Check, Flame, ShieldAlert, Sparkles } from 'lucide-react';
 
 export default function StallDetailModal({ stall, onClose, onAddToCart, addedItemsMap }) {
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   if (!stall) return null;
 
   return (
@@ -29,6 +37,10 @@ export default function StallDetailModal({ stall, onClose, onAddToCart, addedIte
           <img
             src={stall.coverImage || stall.image}
             alt={stall.name}
+            loading="eager"
+            decoding="async"
+            width="800"
+            height="400"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-culinary-card via-culinary-card/60 to-black/30" />
@@ -98,15 +110,25 @@ export default function StallDetailModal({ stall, onClose, onAddToCart, addedIte
                 return (
                   <div
                     key={dish.id}
-                    className="p-4 rounded-2xl bg-[#0f1317] border border-slate-800/90 hover:border-slate-700 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                    className="p-4 rounded-2xl bg-[#0f1317] border border-slate-800/90 hover:border-amber-500/40 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 group/item"
                   >
                     <div className="flex items-start gap-4 flex-1 min-w-0">
                       {dish.image && (
-                        <img
-                          src={dish.image}
-                          alt={dish.name}
-                          className="w-20 h-20 rounded-xl object-cover flex-shrink-0 border border-slate-800"
-                        />
+                        <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden flex-shrink-0 border border-amber-500/30 shadow-lg shadow-black/80 group-hover/item:border-amber-400/60 transition-colors">
+                          <img
+                            src={dish.image}
+                            alt={dish.name}
+                            loading="lazy"
+                            decoding="async"
+                            className="w-full h-full object-cover group-hover/item:scale-105 transition-transform duration-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                          {dish.popular && (
+                            <span className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded-md bg-amber-500 text-culinary-dark font-extrabold text-[9px] uppercase tracking-wider shadow">
+                              ★ Signature
+                            </span>
+                          )}
+                        </div>
                       )}
                       <div>
                         <div className="flex flex-wrap items-center gap-2 mb-1">
@@ -154,7 +176,7 @@ export default function StallDetailModal({ stall, onClose, onAddToCart, addedIte
                       </span>
                       <button
                         onClick={() => onAddToCart(dish, stall.name)}
-                        className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all spring-click ${
+                        className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all spring-click cursor-pointer ${
                           isAdded
                             ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
                             : 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-culinary-dark shadow-md shadow-amber-500/20'
@@ -185,7 +207,7 @@ export default function StallDetailModal({ stall, onClose, onAddToCart, addedIte
           <span>Stall located at Radhuni Table, Abdullah Bhaban, Kazir Dewri, Chattogram</span>
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold"
+            className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold cursor-pointer"
           >
             Back to Stalls
           </button>

@@ -1,8 +1,27 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { UtensilsCrossed, MapPin, Phone, Mail, ExternalLink, Heart } from 'lucide-react';
 
 export default function Footer({ onOpenReservation, onOpenTray }) {
   const googleMapsUrl = "https://www.google.com/maps/search/?api=1&query=Abdullah+Bhaban,+Kazir+Dewri,+Chattogram";
+
+  // Stealth 5-tap trigger for mobile owner access (zero visual trace)
+  const tapCountRef = useRef(0);
+  const tapTimerRef = useRef(null);
+
+  const handleStealthTap = () => {
+    tapCountRef.current += 1;
+    if (tapTimerRef.current) clearTimeout(tapTimerRef.current);
+
+    if (tapCountRef.current >= 5) {
+      tapCountRef.current = 0;
+      window.dispatchEvent(new CustomEvent('radhuni_open_admin'));
+      return;
+    }
+
+    tapTimerRef.current = setTimeout(() => {
+      tapCountRef.current = 0;
+    }, 2000);
+  };
 
   return (
     <footer className="bg-[#07090b] text-slate-400 border-t border-slate-800/80 pt-16 pb-12 text-xs">
@@ -10,7 +29,10 @@ export default function Footer({ onOpenReservation, onOpenTray }) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-800/80">
           {/* Brand Col */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-3">
+            <div 
+              onClick={handleStealthTap}
+              className="flex items-center gap-3 cursor-default select-none"
+            >
               <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 via-culinary-gold to-yellow-300 p-0.5 flex items-center justify-center">
                 <div className="w-full h-full bg-culinary-dark rounded-[10px] flex items-center justify-center">
                   <UtensilsCrossed className="w-5 h-5 text-culinary-gold" />
@@ -87,7 +109,7 @@ export default function Footer({ onOpenReservation, onOpenTray }) {
               <li className="hover:text-white transition-colors">Turkish Fiesta (Charcoal Grills)</li>
               <li className="hover:text-white transition-colors">Madchef X (Smashed Burgers)</li>
               <li className="hover:text-white transition-colors">Pizza Guy (Stone Sourdough)</li>
-              <li className="hover:text-white transition-colors">Hakka Dhaka (Indo-Chinese Wok)</li>
+              <li className="hover:text-white transition-colors">Hakka Chattogram (Indo-Chinese Wok)</li>
               <li className="hover:text-white transition-colors">Club Gelato (Italian Artisanal)</li>
             </ul>
           </div>
@@ -101,7 +123,7 @@ export default function Footer({ onOpenReservation, onOpenTray }) {
               Abdullah Bhaban, Kazir Dewri, Chattogram 4000, Bangladesh
             </p>
             <div className="space-y-1 text-slate-300">
-              <p><strong className="text-white">Daily:</strong> 11:00 AM – 11:30 PM</p>
+              <p><strong className="text-white">Sat – Fri (Open 7 Days):</strong> 11:00 AM – 11:30 PM</p>
               <p><strong className="text-white">Seating:</strong> Walk-in & Reserved</p>
               <p><strong className="text-white">Parking:</strong> Abdullah Bhaban Parking Area</p>
             </div>

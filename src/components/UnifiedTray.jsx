@@ -142,7 +142,7 @@ export default function UnifiedTray({ isOpen, onClose, cartItems, onUpdateQuanti
             <div>
               <h3 className="text-lg font-bold text-white">Your Tray is Empty</h3>
               <p className="text-xs text-slate-400 mt-1 max-w-xs">
-                Explore Darbar, Madchef X, Pizza Guy, or Hakka Dhaka and add your favorite dishes to build a multi-stall meal.
+                Explore Darbar, Madchef X, Pizza Guy, or Hakka Chattogram and add your favorite dishes to build a multi-stall meal.
               </p>
             </div>
             <button
@@ -197,6 +197,15 @@ export default function UnifiedTray({ isOpen, onClose, cartItems, onUpdateQuanti
                       key={item.id}
                       className="p-3 rounded-xl bg-[#0e1216] border border-slate-800 flex items-center justify-between gap-3"
                     >
+                      {item.image && (
+                        <div className="relative w-11 h-11 rounded-lg overflow-hidden flex-shrink-0 border border-amber-500/30 shadow-sm shadow-black/80">
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
                       <div className="flex-1 min-w-0">
                         <h4 className="text-xs font-bold text-white truncate">
                           {item.name}
@@ -305,16 +314,16 @@ export default function UnifiedTray({ isOpen, onClose, cartItems, onUpdateQuanti
             <button
               onClick={handleSimulateOrder}
               disabled={isProcessing}
-              className="w-full py-3.5 rounded-xl font-bold text-xs sm:text-sm bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 text-culinary-dark shadow-xl shadow-amber-500/25 hover:shadow-amber-500/40 hover:scale-[1.02] active:scale-95 transition-all duration-200 flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-xl font-bold text-xs sm:text-sm bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 text-culinary-dark shadow-xl shadow-amber-500/25 hover:shadow-amber-500/40 hover:scale-[1.02] active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
             >
               {isProcessing ? (
                 <>
                   <span className="w-4 h-4 border-2 border-culinary-dark border-t-transparent rounded-full animate-spin" />
-                  <span>Routing to Kitchen Counters...</span>
+                  <span>Dispatching to Kitchen Stalls...</span>
                 </>
               ) : (
                 <>
-                  <span>Simulate Order & Token (৳{total.toLocaleString()})</span>
+                  <span>Place Dining Order & Token (৳{total.toLocaleString()})</span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}

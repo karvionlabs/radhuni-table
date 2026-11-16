@@ -9,7 +9,7 @@ export const seatingZones = [
     statusColor: 'emerald',
     features: ['Natural Daylight', 'Living Plant Walls', 'Communal Oak Tables', 'Stroller Friendly'],
     idealFor: 'Casual lunch, couples, weekend family dining',
-    image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&w=800&q=80',
     ambientSound: 'Gentle murmur & fountain acoustics'
   },
   {
@@ -22,7 +22,7 @@ export const seatingZones = [
     statusColor: 'amber',
     features: ['Live Flame Views', 'Rapid Self-Service Access', 'Panoramic Hall View', 'Centrally Air-Conditioned'],
     idealFor: 'Foodies eager to watch chefs toss woks and grill kebabs',
-    image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80',
+    image: '/images/central-skylight-kitchens.webp',
     ambientSound: 'Sizzling woks & upbeat modern jazz'
   },
   {
@@ -48,7 +48,7 @@ export const seatingZones = [
     statusColor: 'blue',
     features: ['High-Speed Wi-Fi', 'Universal Power Outlets', 'Artisanal Coffee Bar', 'Comfortable Armchairs'],
     idealFor: 'Remote work, casual business meetings, afternoon coffee & pastries',
-    image: 'https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=800&q=80',
+    image: '/images/emerald-cafe-espresso.webp',
     ambientSound: 'Espresso steam & soft lo-fi acoustics'
   }
 ];
